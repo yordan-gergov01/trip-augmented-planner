@@ -93,3 +93,51 @@ IMPORTANT RULES:
 
     trace.append("⚠️ Max steps reached.")
     return "Could not generate itinerary within step limit.", tool_state, trace
+
+def refine_itinerary(client, existing_itinerary, refinement_request, tool_state):
+    """Refine an existing itinerary based on a natural language request."""
+
+    pois = tool_state.get("pois", [])
+    poi_names = [p["name"] for p in pois]
+
+    system_prompt = """You are an expert travel planner AI agent.
+Your task is to refine an existing itinerary based on the user's request.
+
+IMPORTANT RULES:
+- Only use POIs from the provided list — do not hallucinate new places
+- Keep days that don't need changes exactly as they are
+- Preserve the same day structure unless asked to change it
+- Apply the refinement request faithfully
+- Return the complete updated itinerary, structured by day"""
+
+    user_prompt = f"""Here is the existing itinerary:
+
+{existing_itinerary}
+
+---
+
+Available POIs you can use (do not use any other places):
+{json.dumps(poi_names, indent=2)}
+
+---
+
+Refinement request from the user:
+{refinement_request}
+
+Please return the full updated itinerary applying the requested changes."""
+
+    response = client.responses.create(
+        model="gpt-4.1-mini",
+        input=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user",   "content": user_prompt}
+        ],
+    )
+
+    for item in response.output:
+        if item.type == "message":
+            for content in item.content:
+                if hasattr(content, "text"):
+                    return content.text
+
+    return existing_itinerary
