@@ -19,65 +19,27 @@ An AI-powered trip planning application built with **Streamlit**, **OpenAI**, an
 - 🔒 **Secure API Key Handling** — Keys stored in session state only, never persisted
 
 ## Architecture
-
-User Input
-    │
+```mermaid
+flowchart TD
+    A[👤 User Input] --> B[🖥️ Streamlit UI\napp.py]
+    B --> C[🤖 AI Agent\nagent.py]
     
-    ▼
+    C -->|search_pois| D[🗺️ maps.py]
+    C -->|retrieve_guides| E[📚 rag.py]
     
-┌─────────────────────────────────────────┐
-
-│             Streamlit UI (app.py)        │
-
-│  - Trip form, map, refinement panel     │
-
-└──────────────────┬──────────────────────┘
-
-                   │
-                   
-                   ▼
-                   
-┌─────────────────────────────────────────┐
-
-│           AI Agent (agent.py)            │
-
-│  - OpenAI Responses API                 │
-
-│  - Function calling loop (max 10 steps) │
-
-│  - Tool orchestration & state tracking  │
-
-└────────────┬──────────────┬─────────────┘
-
-             │              │
-             
-             ▼              ▼
-             
-┌────────────────┐  ┌───────────────────┐
-
-│  maps.py       │  │  rag.py           │
-
-│                │  │                   │
-
-│ Nominatim API  │  │ Wikivoyage API    │
-
-│ (geocoding)    │  │ (article fetch)   │
-
-│                │  │                   │
-
-│ Overpass API   │  │ TF-IDF Vectorizer │
-
-│ (POI search)   │  │ (scikit-learn)    │
-
-└────────────────┘  │                   │
-
-                    │ Cosine Similarity │
+    D --> F[Nominatim API\nGeocoding]
+    D --> G[Overpass API\nPOI Search]
+    
+    E --> H[Wikivoyage API\nArticle Fetch]
+    H --> I[TF-IDF Vectorizer\nscikit-learn]
+    I --> J[Cosine Similarity\nChunk Retrieval]
+    
+    G --> C
+    J --> C
+    C --> K[📋 Itinerary\n+ 🗺️ PyDeck Map]
+    K --> B
+```
                     
-                    │ (chunk retrieval) │
-                    
-                    └───────────────────┘
-                    
-
 **Data flow:**
 1. User submits trip details
 2. Agent calls `search_pois` → Nominatim geocodes city → Overpass returns real POIs
