@@ -1,0 +1,8 @@
+streamlit
+openai
+pydeck
+requests
+scikit-learn
+numpy
+pandas
+python-dotenv
