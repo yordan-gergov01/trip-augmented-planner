@@ -22,33 +22,61 @@ An AI-powered trip planning application built with **Streamlit**, **OpenAI**, an
 
 User Input
     │
+    
     ▼
+    
 ┌─────────────────────────────────────────┐
+
 │             Streamlit UI (app.py)        │
+
 │  - Trip form, map, refinement panel     │
+
 └──────────────────┬──────────────────────┘
+
                    │
+                   
                    ▼
+                   
 ┌─────────────────────────────────────────┐
+
 │           AI Agent (agent.py)            │
+
 │  - OpenAI Responses API                 │
+
 │  - Function calling loop (max 10 steps) │
+
 │  - Tool orchestration & state tracking  │
+
 └────────────┬──────────────┬─────────────┘
+
              │              │
+             
              ▼              ▼
+             
 ┌────────────────┐  ┌───────────────────┐
+
 │  maps.py       │  │  rag.py           │
+
 │                │  │                   │
+
 │ Nominatim API  │  │ Wikivoyage API    │
+
 │ (geocoding)    │  │ (article fetch)   │
+
 │                │  │                   │
+
 │ Overpass API   │  │ TF-IDF Vectorizer │
+
 │ (POI search)   │  │ (scikit-learn)    │
+
 └────────────────┘  │                   │
+
                     │ Cosine Similarity │
+                    
                     │ (chunk retrieval) │
+                    
                     └───────────────────┘
+                    
 
 **Data flow:**
 1. User submits trip details
