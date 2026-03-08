@@ -65,7 +65,6 @@ IMPORTANT RULES:
         tool_calls = [item for item in response.output if item.type == "function_call"]
         text_items = [item for item in response.output if item.type == "message"]
 
-        # No tool calls — model is done
         if not tool_calls:
             final_text = ""
             for item in text_items:
