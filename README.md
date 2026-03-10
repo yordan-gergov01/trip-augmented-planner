@@ -4,7 +4,7 @@ An AI-powered trip planning application built with **Streamlit**, **OpenAI**, an
 
 ## 🌐 Live Demo
 
-> **[Launch App →](https://agentic-ai-trip-planner.streamlit.app/)**  
+> **[Launch App Here](https://agentic-ai-trip-planner.streamlit.app/)**  
 > *(Bring your own OpenAI API key — no data is stored)*
 
 ## Features
